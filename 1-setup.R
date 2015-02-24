@@ -1,6 +1,6 @@
 library(randomForest);library(caret)
 library(ggplot2);library(dplyr);library(lubridate);library(ggmap);library(GGally)
-library(gridExtra)
+library(gridExtra);library(party)
 
 training <- tbl_df(read.csv("train.csv"))
 testing <- tbl_df(read.csv("test.csv"))
@@ -12,6 +12,7 @@ training$holiday <- factor(training$holiday )
 training$hr <- factor(hour(training$datetime))
 training$wdy <- factor(wday(training$datetime,label = TRUE))
 training$mth <- factor(month(training$datetime,label = TRUE))
+training$yr <- factor(year(training$datetime))
 training$weather <- factor(training$weather)
 training <- select(training,-casual,-registered)
 
@@ -21,6 +22,7 @@ testing$holiday <- factor(testing$holiday )
 testing$hr <- factor(hour(testing$datetime))
 testing$wdy <- factor(wday(testing$datetime,label = TRUE))
 testing$mth <- factor(month(testing$datetime,label = TRUE))
+testing$yr <- factor(year(testing$datetime))
 testing$weather <- factor(testing$weather)
 
 # create daypart
@@ -59,3 +61,19 @@ testing$sunday[testing$wdy != "Sun"] <- "0"
 #convert to factor
 training$sunday <- as.factor(training$sunday)
 testing$sunday <- as.factor(testing$sunday)
+
+# create windy variable
+training$windy[training$windspeed >= 40]<- "1"
+training$windy[training$windspeed < 40] <- "0"
+
+testing$windy[testing$windspeed >= 40]<- "1"
+testing$windy[testing$windspeed < 40] <- "0"
+
+training$windy <- as.factor(training$windy )
+testing$windy <- as.factor(testing$windy )
+
+# split data into training and validation sets
+set.seed(77)
+inTrain <- createDataPartition(y=training$count,p=0.6, list=FALSE)
+training <- training[inTrain,]
+validation<- training[-inTrain,]

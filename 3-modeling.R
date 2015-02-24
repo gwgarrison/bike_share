@@ -1,10 +1,6 @@
 source("1-setup.R")
 # modeling
 
-set.seed(77)
-inTrain <- createDataPartition(y=training$count,p=0.6, list=FALSE)
-training <- training[inTrain,]
-validation<- training[-inTrain,]
 
 ####### Random Forest
 system.time(rf.fit <- randomForest(count ~.,data = select(training,-datetime)))
@@ -23,7 +19,6 @@ write.csv(submit.rf, file="submit_rf_v2.csv",row.names=FALSE)
 
 ####### try ctree and party
 #install.packages("party")
-library(party)
 
 f.bike <- count ~ hr + weather + atemp + mth + wdy + season + holiday
 
@@ -50,11 +45,15 @@ write.csv(submit.ctree, file="submit_ctree_v1.csv",row.names=FALSE)
 f.bike <- count ~ hr + weather  + atemp + mth + wdy + season + holiday + workingday + 
   humidity + daypart + sunday
 
+
 #################### another ctree v3
-f.bike <- count ~ hr + weather  + atemp + mth + wdy + season + holiday + workingday +
-  daypart + sunday
-f.bike <- count ~ season + holiday + workingday + weather + temp + atemp + humidity + 
+f.bike <- count ~ yr + season + holiday + workingday + weather + temp + atemp + humidity + 
   hr + daypart + sunday
+
+#################### another ctree v4
+formula <- count ~ yr + season + holiday + workingday + weather + temp + 
+  atemp + humidity + hr + daypart + sunday
+
 
 system.time(fit.ctree <- ctree(f.bike, data = training))
 #fit.ctree
@@ -65,9 +64,8 @@ predict.ctree <- predict(fit.ctree, testing)
 RMSE(predictv.ctree,validation$count)
 R2(predictv.ctree,validation$count)
 
-
 #build a dataframe with our results
 submit.ctree <- data.frame(datetime = testing$datetime, count=predict.ctree)
 
 #write results to .csv for submission
-write.csv(submit.ctree, file="submit_ctree_v2.csv",row.names=FALSE)
+write.csv(submit.ctree, file="submit_ctree_v4.csv",row.names=FALSE)
