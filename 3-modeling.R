@@ -55,17 +55,23 @@ formula <- count ~ yr + season + holiday + workingday + weather + temp +
   atemp + humidity + hr + daypart + sunday
 
 
-system.time(fit.ctree <- ctree(f.bike, data = training))
+system.time(fit <- ctree(formula, data = training))
+
+############ try caret train # best so far rmse = 48.7095
+system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 2))
+
+######### try simple linear model
+fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
 #fit.ctree
 #run model against test data set
-predictv.ctree <- predict(fit.ctree, validation)
-predict.ctree <- predict(fit.ctree, testing)
+predict.validation <- predict(fit, validation)
+predict.testing<- predict(fit, testing)
 
-RMSE(predictv.ctree,validation$count)
-R2(predictv.ctree,validation$count)
+RMSE(predict.validation,validation$count)
+R2(predict.validation,validation$count)
 
 #build a dataframe with our results
-submit.ctree <- data.frame(datetime = testing$datetime, count=predict.ctree)
+submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit.ctree, file="submit_ctree_v4.csv",row.names=FALSE)
+write.csv(submit, file="submit_ctree_v5.csv",row.names=FALSE)
