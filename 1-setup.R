@@ -1,6 +1,6 @@
 library(randomForest);library(caret)
 library(ggplot2);library(dplyr);library(lubridate);library(ggmap);library(GGally)
-library(gridExtra);library(party)
+library(gridExtra);library(party);lib
 
 training <- tbl_df(read.csv("train.csv"))
 testing <- tbl_df(read.csv("test.csv"))

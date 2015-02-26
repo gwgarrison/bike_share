@@ -38,3 +38,8 @@ grid.arrange(g.t,g.h)
 
 
 training %>% group_by(wdy) %>% summarize(mean.count = mean(count))
+
+training.agg <- training %>% group_by(yr,mth) %>% summarize(mean.count = mean(count))
+training.agg$yrmon <- ymd(paste(training.agg$yr, training.agg$mth,'01', sep = "-"))
+
+g <- ggplot(data = training.agg,aes(x = yrmon,y = mean.count)) + geom_line()
