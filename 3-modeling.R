@@ -58,10 +58,19 @@ formula <- count ~ yr + season + holiday + workingday + weather + temp +
 system.time(fit <- ctree(formula, data = training))
 
 ############ try caret train # best so far rmse = 48.7095
-system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 2))
+formula <- count ~ yr + season + holiday + workingday + weather + temp + 
+  atemp + humidity + hr + daypart + sunday
+# much worse rmse = 118
+#formula <- count ~ yr + season + holiday + workingday + weather + 
+#  atemp + humidity + daypart + sunday
 
-######### try simple linear model
-fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
+system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 3))
+
+######## try caret with random forest, rf took 5911 seconds to run but rmse of 23.47212
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 2))
+
+######### try simple linear model, this was a dud
+#fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
 #fit.ctree
 #run model against test data set
 predict.validation <- predict(fit, validation)
@@ -74,4 +83,4 @@ R2(predict.validation,validation$count)
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit, file="submit_ctree_v5.csv",row.names=FALSE)
+write.csv(submit, file="submit_rf_v6.csv",row.names=FALSE)
