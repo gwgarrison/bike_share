@@ -66,8 +66,13 @@ formula <- count ~ yr + season + holiday + workingday + weather + temp +
 
 system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 3))
 
-######## try caret with random forest, rf took 5911 seconds to run but rmse of 23.47212
+######## try caret with random forest, rf took 5911 seconds to run but rmse of 23.47212, new run 5887 time,rmse 23.34
+######### rmsle .204547
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 2))
+# try greater tuneLength, was not good rmse = 48.7095,rmsel = .35
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 4)) 
+# try less tuneLength
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 1))
 
 ######### try simple linear model, this was a dud
 #fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
@@ -78,9 +83,12 @@ predict.testing<- predict(fit, testing)
 
 RMSE(predict.validation,validation$count)
 R2(predict.validation,validation$count)
+rmsle(predict.validation,validation$count)
+
+save(fit,file ="rf_v7.rda")
 
 #build a dataframe with our results
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit, file="submit_rf_v6.csv",row.names=FALSE)
+write.csv(submit, file="submit_rf_v7.csv",row.names=FALSE)
