@@ -60,6 +60,9 @@ system.time(fit <- ctree(formula, data = training))
 ############ try caret train # best so far rmse = 48.7095
 formula <- count ~ yr + season + holiday + workingday + weather + temp + 
   atemp + humidity + hr + daypart + sunday
+# try interaction for temp and humidity
+formula <- count ~ yr + season + holiday + workingday + weather + temp + 
+  atemp + humidity + hr + daypart + sunday + temp:humidity
 # much worse rmse = 118
 #formula <- count ~ yr + season + holiday + workingday + weather + 
 #  atemp + humidity + daypart + sunday
@@ -68,11 +71,11 @@ system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 3
 
 ######## try caret with random forest, rf took 5911 seconds to run but rmse of 23.47212, new run 5887 time,rmse 23.34
 ######### rmsle .204547
-system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 2))
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 3))
 # try greater tuneLength, was not good rmse = 48.7095,rmsel = .35
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 4)) 
-# try less tuneLength
-system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 1))
+# try less tuneLength, a lot more time but no better performance: 14319 s and rmse 25.06,rmsel .231
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 5))
 
 ######### try simple linear model, this was a dud
 #fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
