@@ -72,6 +72,10 @@ testing$windy[testing$windspeed < 40] <- "0"
 training$windy <- as.factor(training$windy )
 testing$windy <- as.factor(testing$windy )
 
+# change datetime to date
+training$datetime <- parse_date_time(as.character(training$datetime),"%Y%m%d %H%M%S")
+testing$datetime <- parse_date_time(as.character(testing$datetime),"%Y%m%d %H%M%S")
+
 # split data into training and validation sets
 set.seed(77)
 inTrain <- createDataPartition(y=training$count,p=0.6, list=FALSE)
