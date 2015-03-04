@@ -3,13 +3,15 @@ source("1-setup.R")
 
 
 ####### Random Forest
-system.time(rf.fit <- randomForest(count ~.,data = select(training,-datetime)))
+system.time(fit <- randomForest(count ~.,data = select(training,-datetime)))
+########## rf with datetime
+system.time(fit <- randomForest(count ~.,data = training))
 
 # prediction
-rfpred <- predict(rf.fit,newdata=testing)
-rfpredv <- predict(rf.fit,newdata=validation)
+rfpred <- predict(fit,newdata=testing)
+rfpredv <- predict(fit,newdata=validation)
 
-varImpPlot(rf.fit)
+varImpPlot(fit)
 testing.results <- tbl_df(data.frame(testing,rfpred))
 
 #build a dataframe with our results
