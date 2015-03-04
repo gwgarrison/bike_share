@@ -87,10 +87,10 @@ RMSE(predict.validation,validation$count)
 R2(predict.validation,validation$count)
 rmsle(predict.validation,validation$count)
 
-save(fit,file ="rf_v7.rda")
+save(fit,file ="rf_nodatetime_nocaret.rda")
 
 #build a dataframe with our results
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit, file="submit_rf_v7.csv",row.names=FALSE)
+write.csv(submit, file="submit_rf_v8.csv",row.names=FALSE)
