@@ -66,7 +66,7 @@ formula <- count ~ yr + season + holiday + workingday + weather + temp +
 formula <- count ~ yr + season + holiday + workingday + weather + temp + 
   atemp + humidity + hr + daypart + sunday + temp:humidity
 # much worse rmse = 118
-#formula <- count ~ yr + season + holiday + workingday + weather + 
+formula <- count ~ yr + season + holiday + workingday + weather + 
 #  atemp + humidity + daypart + sunday
 
 system.time(fit <- train(formula,data = training,method = "ctree",tuneLength = 3))
@@ -78,6 +78,13 @@ system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 3))
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 4)) 
 # try less tuneLength, a lot more time but no better performance: 14319 s and rmse 25.06,rmsel .231
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 5))
+varImpPlot(fit$finalModel)
+
+########## rf caret with datetime , much worse rmse 59.53
+formula <- count ~ yr + season + holiday + workingday + weather + 
+  atemp + humidity + daypart + sunday + datetime
+system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 7))
+
 
 ######### try simple linear model, this was a dud
 #fit <- lm(count  ~ yr + atemp + daypart +sunday ,data = training)
@@ -90,7 +97,7 @@ RMSE(predict.validation,validation$count)
 R2(predict.validation,validation$count)
 rmsle(predict.validation,validation$count)
 
-save(fit,file ="rf_nodatetime_nocaret.rda")
+save(fit,file ="rf_nodatetime_caret.rda")
 
 #build a dataframe with our results
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
