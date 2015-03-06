@@ -14,6 +14,8 @@ training$wdy <- factor(wday(training$datetime,label = TRUE))
 training$mth <- factor(month(training$datetime,label = TRUE))
 training$yr <- factor(year(training$datetime))
 training$weather <- factor(training$weather)
+training$week <- factor(week(training$datetime))
+training$day <- factor(day(training$datetime))
 training <- select(training,-casual,-registered)
 
 testing$season <- factor(testing$season)
@@ -24,6 +26,8 @@ testing$wdy <- factor(wday(testing$datetime,label = TRUE))
 testing$mth <- factor(month(testing$datetime,label = TRUE))
 testing$yr <- factor(year(testing$datetime))
 testing$weather <- factor(testing$weather)
+testing$week <- factor(week(testing$datetime))
+testing$day <- factor(day(testing$datetime))
 
 # create daypart
 training$daypart <- 4
@@ -32,17 +36,21 @@ testing$daypart <- 4
 training$hr <- as.numeric(training$hr)
 testing$hr <- as.numeric(testing$hr)
 
+# changed daypart to reflect busy and non busy times
 #4AM - 10AM = 1
-training$daypart[(training$hr < 10) & (training$hr > 3)] <- 1
-testing$daypart[(testing$hr < 10) & (testing$hr > 3)] <- 1
+#8AM - 10AM = 1
+training$daypart[(training$hr < 11) & (training$hr > 7)] <- 1
+testing$daypart[(testing$hr < 11) & (testing$hr > 7)] <- 1
 
 #11AM - 3PM = 2
-training$daypart[(training$hr < 16) & (training$hr > 9)] <- 2
-testing$daypart[(testing$hr < 16) & (testing$hr > 9)] <- 2
+#11AM - 4PM = 2
+training$daypart[(training$hr < 17) & (training$hr > 10)] <- 2
+testing$daypart[(testing$hr < 17) & (testing$hr > 10)] <- 2
 
 #4PM - 9PM = 3
-training$daypart[(training$hr < 22) & (training$hr > 15)] <- 3
-testing$daypart[(testing$hr < 22) & (testing$hr > 15)] <- 3
+#17PM - 8PM = 3
+training$daypart[(training$hr < 21) & (training$hr > 16)] <- 3
+testing$daypart[(testing$hr < 21) & (testing$hr > 16)] <- 3
 
 training$daypart <- as.factor(training$daypart)
 testing$daypart <- as.factor(testing$daypart)
