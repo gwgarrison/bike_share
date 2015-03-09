@@ -1,7 +1,7 @@
-source("1-setup.R")
+system.time(source("1-setup.R"))
 
-f <- count ~ atemp
-fit <- lm(formula = f,data = training)
+f <- count ~ daypart + season + temp + yr
+fit <- lm(f,data = training)
 
 predict.validation <- predict(fit, validation)
 

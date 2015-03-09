@@ -20,8 +20,6 @@ ggplot(data = training,aes(x = mth,y = count)) + geom_boxplot(color = "blue")
 ggplot(data = training,aes(x = yr,y = count)) + geom_boxplot(color = "blue")
 ggplot(data = training,aes(x = weather,y = count,color = weather)) + geom_boxplot()
 ggplot(data = training,aes(x = windy,y = count)) + geom_boxplot()
-ggplot(data = training,aes(x = week,y = count)) + geom_boxplot(color = "red")
-ggplot(data = training,aes(x = day ,y = count)) + geom_boxplot(color = "red")
 ggplot(data = training,aes(x = daypart,y = count)) + geom_boxplot(color = "green")
 
 # scatter plots

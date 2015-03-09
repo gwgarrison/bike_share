@@ -14,8 +14,6 @@ training$wdy <- factor(wday(training$datetime,label = TRUE))
 training$mth <- factor(month(training$datetime,label = TRUE))
 training$yr <- factor(year(training$datetime))
 training$weather <- factor(training$weather)
-training$week <- factor(week(training$datetime))
-training$day <- factor(day(training$datetime))
 training <- select(training,-casual,-registered)
 
 testing$season <- factor(testing$season)
@@ -26,8 +24,6 @@ testing$wdy <- factor(wday(testing$datetime,label = TRUE))
 testing$mth <- factor(month(testing$datetime,label = TRUE))
 testing$yr <- factor(year(testing$datetime))
 testing$weather <- factor(testing$weather)
-testing$week <- factor(week(testing$datetime))
-testing$day <- factor(day(testing$datetime))
 
 # create daypart
 training$daypart <- 4
