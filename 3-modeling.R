@@ -81,6 +81,8 @@ system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 3))
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 4)) 
 # try less tuneLength, a lot more time but no better performance: 14319 s and rmse 25.06,rmsel .231
 system.time(fit <- train(formula,data = training,method = "rf",tuneLength = 5))
+# with all independent variables
+system.time(fit <- train(count ~ .,data = training,method = "rf",tuneLength = 3))
 
 # test without train
 system.time(fit <- randomForest(formula = formula,data = training))
@@ -105,10 +107,10 @@ RMSE(predict.validation,validation$count)
 R2(predict.validation,validation$count)
 rmsle(predict.validation,validation$count)
 
-save(fit,file ="rf_nmdatetime_caret.rda")
+save(fit,file ="rf_all_var_ntree_700.rda")
 
 #build a dataframe with our results
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit, file="submit_rf_v8.csv",row.names=FALSE)
+write.csv(submit, file="submit_rf_v9.csv",row.names=FALSE)
