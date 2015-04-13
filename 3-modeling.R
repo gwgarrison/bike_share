@@ -107,10 +107,10 @@ RMSE(predict.validation,validation$count)
 R2(predict.validation,validation$count)
 rmsle(predict.validation,validation$count)
 
-save(fit,file ="rf_all_var_ntree_700.rda")
+save(fit,file ="rf_all_caret_rf.rda")
 
 #build a dataframe with our results
 submit <- data.frame(datetime = testing$datetime, count=predict.testing)
 
 #write results to .csv for submission
-write.csv(submit, file="submit_rf_v9.csv",row.names=FALSE)
+write.csv(submit, file="submit_rf_v10.csv",row.names=FALSE)
