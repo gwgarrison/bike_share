@@ -1,4 +1,4 @@
-source("1-setup.R")
+system.time(source("1-setup.R"))
 
 # load training data
 
@@ -44,3 +44,4 @@ training.agg <- training %>% group_by(yr,mth) %>% summarize(mean.count = mean(co
 training.agg$yrmon <- ymd(paste(training.agg$yr, training.agg$mth,'01', sep = "-"))
 
 g <- ggplot(data = training.agg,aes(x = yrmon,y = mean.count)) + geom_line()
+g
